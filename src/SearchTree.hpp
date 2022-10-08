@@ -50,9 +50,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& cout, const Node* tree) {
 		if(tree == nullptr) return cout; // nothing to print
 
-		cout << tree->left;
-		cout << tree->key << ", ";
-		cout << tree->right;
+		cout << tree->left << tree->key << ", " << tree->right;
 
 		return cout;
 	}

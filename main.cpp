@@ -1,14 +1,9 @@
-/*//////////////////////////////////
-//  Benedikt Binger
-//////////////////////////////////*/
-
 #include <iostream>
 
 #include "SearchTree.hpp"
 
 
 int main(int argc, char** argv) {
-	// TreeNode<int>* tree = new TreeNode<int>(5);
 	TreeNode<int> tree(5);
 
 	tree.insert(3);
@@ -31,6 +26,14 @@ int main(int argc, char** argv) {
 
 	std::cout << "removing 10\n";
 	tree.deleteNode(tree.search(10));
+	std::cout << tree << "\n";
+
+	std::cout << "removing element before 5 (3)\n";
+	tree.deleteNode(tree.search(5)->predecessor());
+	std::cout << tree << "\n";
+
+	std::cout << "removing element after 5 (7)\n";
+	tree.deleteNode(tree.search(5)->successor());
 	std::cout << tree << "\n";
 
 	return 0;
