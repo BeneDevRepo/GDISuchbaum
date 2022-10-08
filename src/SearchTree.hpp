@@ -5,7 +5,7 @@
 
 template<typename T>
 class TreeNode {
-	using Node = TreeNode<T>;
+	using Node = TreeNode<T>; // Alias for more readable implementation
 
 private:
     Node* parent = nullptr;

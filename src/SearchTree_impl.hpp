@@ -1,7 +1,7 @@
 //##################  Private:  ######################
 
 template<typename T>
-void TreeNode<T>::transplant(const TreeNode<T> *const nodeToReplace, TreeNode<T> *const replacement) {
+void TreeNode<T>::transplant(const Node *const nodeToReplace, Node *const replacement) {
 	if(nodeToReplace->parent == nullptr)
 		(void)0; //tree = replacement; // impossible to implement
 	else if(nodeToReplace == nodeToReplace->parent->left)
