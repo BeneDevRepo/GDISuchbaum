@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 
 file(GLOB_RECURSE files "src/*.cpp")
 add_executable(Aufgaben_2 main.cpp ${files})

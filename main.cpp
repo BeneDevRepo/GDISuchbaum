@@ -4,36 +4,34 @@
 
 #include <iostream>
 
-#include "List.h"
-
-#include "tests.h"
-
+#include "SearchTree.hpp"
 
 
 int main(int argc, char** argv) {
+	// TreeNode<int>* tree = new TreeNode<int>(5);
+	TreeNode<int> tree(5);
 
-	Node* tree = createTree(); // []
+	tree.insert(3);
+	tree.insert(4);
+	tree.insert(2);
+	tree.insert(7);
+	tree.insert(8);
+	tree.insert(9);
+	tree.insert(10);
 
-	insert(tree, 5);
-	insert(tree, 3);
-	insert(tree, 4);
-	insert(tree, 2);
-	insert(tree, 7);
-	insert(tree, 8);
-	insert(tree, 9);
-	insert(tree, 10);
+	std::cout << tree << "\n";
 
-	print(tree);
-	std::cout << "\n";
+	std::cout << "removing 4\n";
+	tree.deleteNode(tree.search(4));
+	std::cout << tree << "\n";
 
-	std::cout << "removing\n";
-	// remove(tree, search(tree, 4));
-	remove(tree, search(tree, 5));
+	std::cout << "removing 8\n";
+	tree.deleteNode(tree.search(8));
+	std::cout << tree << "\n";
 
-	print(tree);
-	std::cout << "\n";
-
-	// Node *res = search(tree, 4);
+	std::cout << "removing 10\n";
+	tree.deleteNode(tree.search(10));
+	std::cout << tree << "\n";
 
 	return 0;
 }
