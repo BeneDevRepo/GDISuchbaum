@@ -93,9 +93,9 @@ TreeNode<T>* TreeNode<T>::search(const T skey) {
 		return this;
 
 	if(skey < key)
-		return left ? left->search(skey) : this;
+		return left ? left->search(skey) : nullptr;
 
-	return right ? right->search(skey) : this;
+	return right ? right->search(skey) : nullptr;
 }
 
 
