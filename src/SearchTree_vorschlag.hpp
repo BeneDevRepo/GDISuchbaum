@@ -1,0 +1,146 @@
+#include <iostream>
+
+template<typename T>
+class SearchTree {
+public:
+	class Node {
+		friend class SearchTree;
+
+		Node* parent = nullptr;
+		Node* left = nullptr;
+		Node* right = nullptr;
+
+	public:
+		const T key;
+
+	public:
+		Node(const T rootKey) : key(rootKey) {}
+		virtual ~Node() {
+			delete this->left;
+			delete this->right;
+		}
+
+		// Disallow (accidental) copying or moving:
+		Node(const Node& copyFrom) = delete;
+		Node(Node&& moveFrom) = delete;
+
+		// optional, aber uebersichtlicher:
+		// e.g. tree.search(5)->predecessor()->predecessor()  statt  predecessor(predecessor(tree.search(5)))
+		Node* predecessor() { return SearchTree::predecessor(this); }
+		Node* successor()   { return SearchTree::successor(this); }
+		Node* minimum()     { return SearchTree::minimum(this); }
+		Node* maximum()     { return SearchTree::maximum(this); }
+	};
+
+private:
+	Node* root; // Wurzel (im Falle eines leeren Baumes: nullptr)
+
+public:
+	SearchTree(): root(nullptr) { }
+	virtual ~SearchTree() { delete root; }
+
+	// Disallow (accidental) copying or moving:
+	SearchTree(const SearchTree<T>& copyFrom) = delete;
+	SearchTree(SearchTree<T>&& moveFrom) = delete;
+
+private:
+	void transplant(const Node *const nodeToReplace, Node *const replacementNode); // internally used by void delete_node(...)
+
+public:
+	void insert(const T key);
+	void deleteNode(Node *const node); // "const Node *const node" nicht zulaessig, da node sonst nicht korrekt geloescht werden koennte
+	Node* search(const T key);
+	Node* minimum() { return minimum(root); }
+	Node* maximum() { return maximum(root); }
+	static Node* minimum(Node* node);
+	static Node* maximum(Node* node);
+	static Node* predecessor(Node* node);
+	static Node* successor(Node *node);
+
+public:
+	// optional, aber praktisch zum debuggen:
+	friend std::ostream& operator<<(std::ostream& cout, const Node* tree) {
+		if(tree == nullptr) return cout; // nothing to print
+
+		cout << tree->left << tree->key << ", " << tree->right;
+
+		return cout;
+	}
+
+	friend std::ostream& operator<<(std::ostream& cout, const SearchTree& tree) {
+		// cout << tree.root; // markiert rootNode nicht
+		cout << tree.root->left << "<" << tree.root->key << ">, " << tree.root->right; // markiert rootNode
+		return cout;
+	}
+};
+
+// Implementierungen der Funktionen koennen in separate Datei ausgelagert werden:
+#include "SearchTree_vorschlag_impl.hpp"
+
+
+
+
+/*
+=======  Test-Programm  =======
+
+#include <iostream>
+
+// #include "SearchTree.hpp"
+#include "SearchTree_vorschlag.hpp"
+
+
+int main(int argc, char** argv) {
+	{
+		// TreeNode<int> tree(5);
+		SearchTree<int> tree;
+
+		// Einfuegen:
+		tree.insert(5);
+		tree.insert(4);
+		tree.insert(3);
+		tree.insert(2);
+		tree.insert(7);
+		tree.insert(8);
+		tree.insert(9);
+		tree.insert(10);
+
+		// Ausdrucken:
+		std::cout << "Tree: " << tree << "\n"; // erwartet: 2, 3, 4, <5>, 7, 8, 9, 10,
+
+		// Suchen:
+		std::cout << "Searching 3, found: " << tree.search(3)->key << "\n";
+		std::cout << "Searching 21 (not in list), found: " << (void*)tree.search(21) << "\n"; // Falls element nicht in Liste: nullptr
+
+		// Loeschen:
+		std::cout << "removing 8\n";
+		tree.deleteNode(tree.search(8));
+		std::cout << tree << "\n";
+
+		std::cout << "removing 10\n";
+		tree.deleteNode(tree.search(10));
+		std::cout << tree << "\n";
+
+		// Sonderfall: Wurzel loeschen:
+		std::cout << "removing 5 (root node)\n";
+		tree.deleteNode(tree.search(5));
+		std::cout << tree << "\n";
+
+		// Predecessor testen:
+		std::cout << "removing element before 4 (3)\n";
+		tree.deleteNode(tree.search(4)->predecessor());
+		std::cout << tree << "\n";
+
+		// Successor testen:
+		std::cout << "removing element after 4 (7)\n";
+		tree.deleteNode(tree.search(4)->successor());
+		std::cout << tree << "\n";
+
+		// <<--  Hier wird aufgrund des Scope-Endes automatisch der destruktor von tree aufgerufen
+	}
+
+	std::cout << "deleted tree, no errors occurred\n"; // Falls dieser text NICHT erscheint, dann ist das Programm im Destruktor von tree abgestuerzt
+
+	return 0;
+}
+
+*/
