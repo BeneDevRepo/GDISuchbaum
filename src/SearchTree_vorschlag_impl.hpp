@@ -1,5 +1,65 @@
-#pragma once
+// #####  Implementierung  #####
 
+template<typename T>
+TreeNode<T>* TreeNode<T>::minimum() {
+	TreeNode *min = this;
+	while(min->left != nullptr)
+		min = min->left;
+	return min;
+}
+
+template<typename T>
+TreeNode<T>* TreeNode<T>::maximum() {
+	TreeNode *max = this;
+	while(max->right != nullptr)
+		max = max->right;
+	return max;
+}
+
+
+template<typename T>
+TreeNode<T>* TreeNode<T>::predecessor() {
+	// if possible, traverse downwards to the left:
+	if(this->left != nullptr)
+		return this->left->maximum();
+
+	// otherwise, traverse upwards until we land on a Node of lesser value:
+	TreeNode *prev = this;
+	for(TreeNode *ptr = this->parent;; ptr = ptr->parent) {
+		// ptr == null means that we have traversed the whole tree,
+		// entered the root node from the left side, and followed its parent- (=null-) pointer:
+		if(ptr == nullptr)
+			return nullptr;
+
+		// if the previous node was right of the current one, we must have landed on a node of smaller value:
+		if(prev == ptr->right)
+			return ptr;
+		
+		prev = ptr; // store current node as previous node for next iteration
+	}
+}
+
+template<typename T>
+TreeNode<T>* TreeNode<T>::successor() {
+	// if possible, traverse downwards to the right:
+	if(this->right != nullptr)
+		return this->right->minimum();
+
+	// otherwise, traverse upwards until we land on a Node of greater value:
+	TreeNode *prev = this;
+	for(TreeNode *ptr = this->parent;; ptr = ptr->parent) {
+		// ptr == null means that we have traversed the whole tree,
+		// entered the root node from the right side, and followed its parent- (=null-) pointer:
+		if(ptr == nullptr)
+			return nullptr;
+
+		// if the previous node was left of the current one, we must have landed on a successive node:
+		if(prev == ptr->left)
+			return ptr;
+		
+		prev = ptr; // store current node as previous node for next iteration
+	}
+}
 
 //##################  Private:  ######################
 
@@ -60,7 +120,7 @@ void SearchTree<T>::deleteNode(Node *const node) {
 		// at this point, node has both a left and a right child.
 		// z=node, y=nodeSuc
         // Node* nodeSuc = node->right->minimum(); // get node's successor
-        Node* nodeSuc = successor(node); // get node's successor (same as node->right->minimum(), as node->right can not be null here.)
+        Node* nodeSuc = node->successor(); // get node's successor (same as node->right->minimum(), as node->right can not be null here.)
 
         if(nodeSuc->parent != node) { // if node->right is not node's successor:
             transplant(nodeSuc, nodeSuc->right); // replace node's successor by its right child 
@@ -90,7 +150,7 @@ void SearchTree<T>::deleteNode(Node *const node) {
 
 
 template<typename T>
-typename SearchTree<T>::Node* SearchTree<T>::search(const T key) {
+TreeNode<T>* SearchTree<T>::search(const T key) {
 	const auto search_ = [](const auto search, Node *root, const T key) -> Node* {
 		if(key == root->key)
 			return root;
@@ -104,64 +164,3 @@ typename SearchTree<T>::Node* SearchTree<T>::search(const T key) {
 	return search_(search_, root, key);
 }
 
-
-template<typename T>
-typename SearchTree<T>::Node* SearchTree<T>::minimum(Node* node) {
-	Node *min = node;
-	while(min->left != nullptr)
-		min = min->left;
-	return min;
-}
-
-template<typename T>
-typename SearchTree<T>::Node* SearchTree<T>::maximum(Node* node) {
-	Node *max = node;
-	while(max->right != nullptr)
-		max = max->right;
-	return max;
-}
-
-
-template<typename T>
-typename SearchTree<T>::Node* SearchTree<T>::predecessor(Node* node) {
-	// if possible, traverse downwards to the left:
-	if(node->left != nullptr)
-		return maximum(node->left);
-
-	// otherwise, traverse upwards until we land on a Node of lesser value:
-	Node *prev = node;
-	for(Node *ptr = node->parent;; ptr = ptr->parent) {
-		// ptr == null means that we have traversed the whole tree,
-		// entered the root node from the left side, and followed its parent- (=null-) pointer:
-		if(ptr == nullptr)
-			return nullptr;
-
-		// if the previous node was right of the current one, we must have landed on a node of smaller value:
-		if(prev == ptr->right)
-			return ptr;
-		
-		prev = ptr; // store current node as previous node for next iteration
-	}
-}
-
-template<typename T>
-typename SearchTree<T>::Node* SearchTree<T>::successor(Node* node) {
-	// if possible, traverse downwards to the right:
-	if(node->right != nullptr)
-		return minimum(node->right);
-
-	// otherwise, traverse upwards until we land on a Node of greater value:
-	Node *prev = node;
-	for(Node *ptr = node->parent;; ptr = ptr->parent) {
-		// ptr == null means that we have traversed the whole tree,
-		// entered the root node from the right side, and followed its parent- (=null-) pointer:
-		if(ptr == nullptr)
-			return nullptr;
-
-		// if the previous node was left of the current one, we must have landed on a successive node:
-		if(prev == ptr->left)
-			return ptr;
-		
-		prev = ptr; // store current node as previous node for next iteration
-	}
-}

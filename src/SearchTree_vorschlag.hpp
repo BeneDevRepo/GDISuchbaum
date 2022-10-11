@@ -1,36 +1,53 @@
 #include <iostream>
 
+
+template<typename T>
+class SearchTree;
+
+
+template<typename T>
+class TreeNode {
+	friend class SearchTree<T>;
+
+	TreeNode* parent = nullptr;
+	TreeNode* left = nullptr;
+	TreeNode* right = nullptr;
+
+public:
+	const T key;
+
+public:
+	TreeNode(const T rootKey) : key(rootKey) {}
+	virtual ~TreeNode() {
+		delete this->left;
+		delete this->right;
+	}
+
+	// Disallow (accidental) copying or moving:
+	TreeNode(const TreeNode& copyFrom) = delete;
+	TreeNode(TreeNode&& moveFrom) = delete;
+
+public:
+	TreeNode* predecessor();
+	TreeNode* successor();
+	TreeNode* minimum();
+	TreeNode* maximum();
+
+public:
+	// optional, aber praktisch zum debuggen:
+	friend std::ostream& operator<<(std::ostream& cout, const TreeNode* tree) {
+		if(tree == nullptr) return cout; // nothing to print
+
+		cout << tree->left << tree->key << ", " << tree->right;
+
+		return cout;
+	}
+};
+
+
 template<typename T>
 class SearchTree {
-public:
-	class Node {
-		friend class SearchTree;
-
-		Node* parent = nullptr;
-		Node* left = nullptr;
-		Node* right = nullptr;
-
-	public:
-		const T key;
-
-	public:
-		Node(const T rootKey) : key(rootKey) {}
-		virtual ~Node() {
-			delete this->left;
-			delete this->right;
-		}
-
-		// Disallow (accidental) copying or moving:
-		Node(const Node& copyFrom) = delete;
-		Node(Node&& moveFrom) = delete;
-
-		// optional, aber uebersichtlicher:
-		// e.g. tree.search(5)->predecessor()->predecessor()  statt  predecessor(predecessor(tree.search(5)))
-		Node* predecessor() { return SearchTree::predecessor(this); }
-		Node* successor()   { return SearchTree::successor(this); }
-		Node* minimum()     { return SearchTree::minimum(this); }
-		Node* maximum()     { return SearchTree::maximum(this); }
-	};
+	using Node = TreeNode<T>; // optional, Fuer uebersichtlichen Code
 
 private:
 	Node* root; // Wurzel (im Falle eines leeren Baumes: nullptr)
@@ -40,8 +57,8 @@ public:
 	virtual ~SearchTree() { delete root; }
 
 	// Disallow (accidental) copying or moving:
-	SearchTree(const SearchTree<T>& copyFrom) = delete;
-	SearchTree(SearchTree<T>&& moveFrom) = delete;
+	SearchTree(const SearchTree& copyFrom) = delete;
+	SearchTree(SearchTree&& moveFrom) = delete;
 
 private:
 	void transplant(const Node *const nodeToReplace, Node *const replacementNode); // internally used by void delete_node(...)
@@ -50,23 +67,12 @@ public:
 	void insert(const T key);
 	void deleteNode(Node *const node); // "const Node *const node" nicht zulaessig, da node sonst nicht korrekt geloescht werden koennte
 	Node* search(const T key);
-	Node* minimum() { return minimum(root); }
-	Node* maximum() { return maximum(root); }
-	static Node* minimum(Node* node);
-	static Node* maximum(Node* node);
-	static Node* predecessor(Node* node);
-	static Node* successor(Node *node);
+
+	Node* minimum() { return root->minimum()); }
+	Node* maximum() { return root->maximum()); }
 
 public:
 	// optional, aber praktisch zum debuggen:
-	friend std::ostream& operator<<(std::ostream& cout, const Node* tree) {
-		if(tree == nullptr) return cout; // nothing to print
-
-		cout << tree->left << tree->key << ", " << tree->right;
-
-		return cout;
-	}
-
 	friend std::ostream& operator<<(std::ostream& cout, const SearchTree& tree) {
 		// cout << tree.root; // markiert rootNode nicht
 		cout << tree.root->left << "<" << tree.root->key << ">, " << tree.root->right; // markiert rootNode
