@@ -11,13 +11,16 @@ int main(int argc, char** argv) {
 
 		// Einfuegen:
 		tree.insert(5);
-		tree.insert(4);
-		tree.insert(3);
-		tree.insert(2);
 		tree.insert(7);
 		tree.insert(8);
-		tree.insert(9);
 		tree.insert(10);
+		tree.insert(2);
+		tree.insert(4);
+		tree.insert(3);
+		tree.insert(9);
+
+		// tree.print();
+
 
 		// Ausdrucken:
 		std::cout << "Tree: " << tree << "\n"; // erwartet: 2, 3, 4, <5>, 7, 8, 9, 10,

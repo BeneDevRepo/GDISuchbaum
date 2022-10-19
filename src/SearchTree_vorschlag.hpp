@@ -79,6 +79,22 @@ public:
 		cout << tree.root->left << "<" << tree.root->key << ">, " << tree.root->right; // markiert rootNode
 		return cout;
 	}
+
+	void printSubtree(const Node* tree, const size_t depth) {
+		if(tree == nullptr) return;
+
+		printSubtree(tree->right, depth+1);
+
+		for(size_t i = 0; i < depth; i++)
+			std::cout << "  ";
+		std::cout << tree->key << "\n";
+
+		printSubtree(tree->left, depth+1);
+	}
+
+	void print() {
+		printSubtree(root, 0);
+	}
 };
 
 // Implementierungen der Funktionen koennen in separate Datei ausgelagert werden:
