@@ -9,6 +9,7 @@ template<typename T>
 class TreeNode {
 	friend class SearchTree<T>;
 
+public:
 	TreeNode* parent = nullptr;
 	TreeNode* left = nullptr;
 	TreeNode* right = nullptr;
@@ -68,8 +69,8 @@ public:
 	void deleteNode(Node *const node); // "const Node *const node" nicht zulaessig, da node sonst nicht korrekt geloescht werden koennte
 	Node* search(const T key);
 
-	Node* minimum() { return root->minimum()); }
-	Node* maximum() { return root->maximum()); }
+	Node* minimum() { return root->minimum(); }
+	Node* maximum() { return root->maximum(); }
 
 public:
 	// optional, aber praktisch zum debuggen:

@@ -2,8 +2,10 @@
 
 template<typename T>
 class TreeNode {
-    TreeNode<T>* father = nullptr;
     const T key;
+
+public:
+    TreeNode<T>* father = nullptr;
     TreeNode<T>* left = nullptr;
     TreeNode<T>* right = nullptr;
 
