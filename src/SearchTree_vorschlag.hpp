@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 
 
@@ -43,6 +45,26 @@ public:
 
 		return cout;
 	}
+
+	bool isValid() const {
+		if(left != nullptr) {
+			if(left->parent != this)
+				return false;
+			
+			if(!left->isValid())
+				return false;
+		}
+
+		if(right != nullptr) {
+			if(right->parent != this)
+				return false;
+			
+			if(!right->isValid())
+				return false;
+		}
+
+		return true;
+	}
 };
 
 
@@ -80,20 +102,34 @@ public:
 		return cout;
 	}
 
-	void printSubtree(const Node* tree, const size_t depth) {
+	static void printSubtree(const Node* tree, const size_t depth) {
 		if(tree == nullptr) return;
 
-		printSubtree(tree->right, depth+1);
+		printSubtree(tree->right, depth + 1);
 
 		for(size_t i = 0; i < depth; i++)
 			std::cout << "  ";
 		std::cout << tree->key << "\n";
 
-		printSubtree(tree->left, depth+1);
+		printSubtree(tree->left, depth + 1);
 	}
 
-	void print() {
+	void print() const {
 		printSubtree(root, 0);
+	}
+
+	bool isValid() const {
+		if(root == nullptr)
+			return true;
+
+		if(root->parent != nullptr)
+			return false;
+
+		return root->isValid();
+	}
+
+	bool isEmpty() const {
+		return root == nullptr;
 	}
 };
 

@@ -152,7 +152,7 @@ void SearchTree<T>::deleteNode(Node *const node) {
 template<typename T>
 TreeNode<T>* SearchTree<T>::search(const T key) {
 	const auto search_ = [](const auto search, Node *root, const T key) -> Node* {
-		if(root == nullptr ||key == root->key)
+		if(root == nullptr || key == root->key)
 			return root;
 
 		if(key < root->key)

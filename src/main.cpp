@@ -3,8 +3,13 @@
 // #include "SearchTree.hpp"
 #include "SearchTree_vorschlag.hpp"
 
+#include "tests/test_all.hpp"
+
 
 int main(int argc, char** argv) {
+	test_all();
+	return 0;
+	
 	{
 		// TreeNode<int> tree(5);
 		SearchTree<int> tree;
@@ -20,6 +25,7 @@ int main(int argc, char** argv) {
 		tree.insert(9);
 
 		// tree.print();
+		// return 0;
 
 
 		// Ausdrucken:
