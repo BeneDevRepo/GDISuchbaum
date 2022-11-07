@@ -12,14 +12,14 @@
 int test_aufgabe() {
 	using KEY_TYPE = int;
 
-	static constexpr size_t NUM_ENTRIES = 1000;
-	static constexpr size_t laenge_laufzeit = 5 * 1000 * 1000;
+	static constexpr size_t NUM_ENTRIES = 1000; // anzahl der Elemente, die gleichzietig im suchbaum sind
+	static constexpr size_t NUM_REPEATS = 5 * 1000 * 1000; // anzahl der insert-delete zyklen
 
 	size_t index = 0;
 	KEY_TYPE zahlspeicher[NUM_ENTRIES]; // "queue"
 
 	SearchTree<KEY_TYPE> tree;
-	const auto genKey = generateKey<KEY_TYPE>;
+	const auto genKey = generateKey<KEY_TYPE>; // quelle für Zufallszahlen
 
 
 	// insert <NUM_ENTRIES> unique numbers into tree:
@@ -42,7 +42,8 @@ int test_aufgabe() {
 
 	std::cout << "Erste Ausgabe: " << tree << "\n";
 
-	for (size_t k = 0; k < laenge_laufzeit; k++) {
+	// replace a single element of the tree by a fresh random number <NUM_REPEATS> times:
+	for (size_t k = 0; k < NUM_REPEATS; k++) {
 		const KEY_TYPE zufallszahl = genKey();
 
 		bool doppelt = false;
