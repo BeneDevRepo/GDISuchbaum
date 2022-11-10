@@ -1,7 +1,7 @@
 #include <iostream>
 
 // #include "SearchTree.hpp"
-#include "SearchTree_vorschlag.hpp"
+#include "SearchTree.hpp"
 
 #include "tests/test_all.hpp"
 

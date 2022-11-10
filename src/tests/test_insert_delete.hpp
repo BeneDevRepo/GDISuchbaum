@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SearchTree_vorschlag.hpp"
+#include "SearchTree.hpp"
 
 #include "testing_general.hpp"
 
