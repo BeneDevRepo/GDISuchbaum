@@ -102,18 +102,20 @@ public:
 		return cout;
 	}
 
+	// preorder-print:
 	static void printSubtree(const Node* tree, const size_t depth) {
 		if(tree == nullptr) return;
-
-		printSubtree(tree->right, depth + 1);
 
 		for(size_t i = 0; i < depth; i++)
 			std::cout << "  ";
 		std::cout << tree->key << "\n";
 
+		printSubtree(tree->right, depth + 1);
+
 		printSubtree(tree->left, depth + 1);
 	}
 
+	// preorder-print:
 	void print() const {
 		printSubtree(root, 0);
 	}
