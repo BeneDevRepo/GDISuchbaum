@@ -21,10 +21,10 @@ public:
 
 public:
 	TreeNode(const T rootKey) : key(rootKey) {}
-	virtual ~TreeNode() {
+	/*virtual ~TreeNode() {
 		delete this->left;
 		delete this->right;
-	}
+	}*/
 
 	// Disallow (accidental) copying or moving:
 	TreeNode(const TreeNode& copyFrom) = delete;
@@ -77,7 +77,28 @@ private:
 
 public:
 	SearchTree(): root(nullptr) { }
-	virtual ~SearchTree() { delete root; }
+	virtual ~SearchTree() {
+		Node* now = root;
+		while (now) {
+			if (now->left) {
+				now = now->left;
+				if (now->parent != nullptr) {
+					now->parent->left = nullptr;
+				}
+			}
+			else if (now->right) {
+				now = now->right;
+				if (now->parent != nullptr) {
+					now->parent->right = nullptr;
+				}
+			}
+			else {
+				Node* next = now->parent;
+				delete now;
+				now = next;
+			}
+		}
+	}
 
 	// Disallow (accidental) copying or moving:
 	SearchTree(const SearchTree& copyFrom) = delete;
